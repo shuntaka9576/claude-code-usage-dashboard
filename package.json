@@ -1,0 +1,16 @@
+{
+  "name": "claude-code-usage-dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "type-check": "pnpm -r type-check",
+    "test": "pnpm -r test",
+    "deploy": "pnpm --filter @claude-code-usage-dashboard/aws deploy",
+    "lint:fmt": "prettier --check '**/*.{json,yaml,yml}'",
+    "fix": "prettier --write '**/*.{json,yaml,yml}'"
+  },
+  "devDependencies": {
+    "prettier": "^3.9.4"
+  },
+  "packageManager": "pnpm@10.33.2"
+}

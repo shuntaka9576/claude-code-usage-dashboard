@@ -1,0 +1,919 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ClaudeObservabilityStack > snapshot 1`] = `
+{
+  "Outputs": {
+    "OtlpIngestApiApiKeyId2943A3E3": {
+      "Value": {
+        "Ref": "OtlpIngestApiRestApiApiKey6C9FA9E0",
+      },
+    },
+    "OtlpIngestApiOtlpEndpoint0D1CFE2A": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "OtlpIngestApiRestApi87272577",
+            },
+            ".execute-api.",
+            {
+              "Ref": "AWS::Region",
+            },
+            ".",
+            {
+              "Ref": "AWS::URLSuffix",
+            },
+            "/",
+            {
+              "Ref": "OtlpIngestApiRestApiDeploymentStageprd317DDC7D",
+            },
+          ],
+        ],
+      },
+    },
+    "OtlpIngestApiRestApiEndpoint6C588004": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "OtlpIngestApiRestApi87272577",
+            },
+            ".execute-api.",
+            {
+              "Ref": "AWS::Region",
+            },
+            ".",
+            {
+              "Ref": "AWS::URLSuffix",
+            },
+            "/",
+            {
+              "Ref": "OtlpIngestApiRestApiDeploymentStageprd317DDC7D",
+            },
+            "/",
+          ],
+        ],
+      },
+    },
+  },
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "Dashboard9E4231ED": {
+      "Properties": {
+        "DashboardBody": {
+          "Fn::Join": [
+            "",
+            [
+              "{"widgets":[{"type":"chart","x":0,"y":0,"width":8,"height":6,"properties":{"view":"line","title":"Cost (USD, team total)","region":"",
+              {
+                "Ref": "AWS::Region",
+              },
+              "","data":{"queries":[{"id":"cost","type":"cloudwatch-metrics","language":"PromQL","query":"sum(increase({\\"claude_code.cost.usage\\", \\"@resource.service.name\\"=\\"claude-code\\"}[15m]))","label":"cost USD (15m)"}]},"plotOptions":{"legend":{"position":"bottom","show":true},"style":{"lineOptions":{"width":2,"pattern":"solid","spline":false,"filled":false,"stacked":false},"markOptions":{"enabled":false}}}}},{"type":"chart","x":8,"y":0,"width":8,"height":6,"properties":{"view":"line","title":"Token usage (by type)","region":"",
+              {
+                "Ref": "AWS::Region",
+              },
+              "","data":{"queries":[{"id":"tokens","type":"cloudwatch-metrics","language":"PromQL","query":"sum by (type)(increase({\\"claude_code.token.usage\\", \\"@resource.service.name\\"=\\"claude-code\\"}[15m]))"}]},"plotOptions":{"legend":{"position":"bottom","show":true},"style":{"lineOptions":{"width":2,"pattern":"solid","spline":false,"filled":false,"stacked":false},"markOptions":{"enabled":false}}}}},{"type":"chart","x":16,"y":0,"width":8,"height":6,"properties":{"view":"line","title":"Token usage (by model)","region":"",
+              {
+                "Ref": "AWS::Region",
+              },
+              "","data":{"queries":[{"id":"tokensByModel","type":"cloudwatch-metrics","language":"PromQL","query":"sum by (model)(increase({\\"claude_code.token.usage\\", \\"@resource.service.name\\"=\\"claude-code\\"}[15m]))"}]},"plotOptions":{"legend":{"position":"bottom","show":true},"style":{"lineOptions":{"width":2,"pattern":"solid","spline":false,"filled":false,"stacked":false},"markOptions":{"enabled":false}}}}},{"type":"log","width":12,"height":8,"x":0,"y":6,"properties":{"view":"table","title":"Skill activations (by skill)","region":"",
+              {
+                "Ref": "AWS::Region",
+              },
+              "","query":"SOURCE '",
+              {
+                "Ref": "EventsLogGroupEB594EE7",
+              },
+              "' | filter body = 'claude_code.skill_activated'\\n| stats count(*) as activations by attributes.skill.name as skill\\n| sort activations desc\\n| limit 25"}},{"type":"log","width":12,"height":8,"x":12,"y":6,"properties":{"view":"table","title":"Skill cost (USD, by skill)","region":"",
+              {
+                "Ref": "AWS::Region",
+              },
+              "","query":"SOURCE '",
+              {
+                "Ref": "EventsLogGroupEB594EE7",
+              },
+              "' | filter body = 'claude_code.api_request' and ispresent(attributes.skill.name)\\n| stats sum(attributes.cost_usd) as cost_usd, sum(attributes.output_tokens) as output_tokens by attributes.skill.name as skill\\n| sort cost_usd desc\\n| limit 25"}},{"type":"log","width":12,"height":8,"x":0,"y":14,"properties":{"view":"timeSeries","title":"Tool failure rate (%)","region":"",
+              {
+                "Ref": "AWS::Region",
+              },
+              "","query":"SOURCE '",
+              {
+                "Ref": "EventsLogGroupEB594EE7",
+              },
+              "' | filter body = 'claude_code.tool_result'\\n| stats sum(attributes.success = 'false') * 100.0 / count(*) as failure_pct by bin(1h)","stacked":false}},{"type":"log","width":12,"height":8,"x":12,"y":14,"properties":{"view":"table","title":"Tool failures (recent)","region":"",
+              {
+                "Ref": "AWS::Region",
+              },
+              "","query":"SOURCE '",
+              {
+                "Ref": "EventsLogGroupEB594EE7",
+              },
+              "' | fields @timestamp, attributes.tool_name, attributes.error_type, attributes.duration_ms\\n| filter body = 'claude_code.tool_result' and attributes.success = 'false'\\n| sort @timestamp desc\\n| limit 50"}},{"type":"log","width":24,"height":8,"x":0,"y":22,"properties":{"view":"table","title":"API errors (recent)","region":"",
+              {
+                "Ref": "AWS::Region",
+              },
+              "","query":"SOURCE '",
+              {
+                "Ref": "EventsLogGroupEB594EE7",
+              },
+              "' | fields @timestamp, attributes.model, attributes.error, attributes.status_code\\n| filter body = 'claude_code.api_error'\\n| sort @timestamp desc\\n| limit 50"}}]}",
+            ],
+          ],
+        },
+        "DashboardName": "claude-code-ops",
+      },
+      "Type": "AWS::CloudWatch::Dashboard",
+    },
+    "EventsLogGroupEB594EE7": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "LogGroupName": "/claude-code/events",
+        "RetentionInDays": 400,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "EventsLogStream204BE354": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "LogGroupName": {
+          "Ref": "EventsLogGroupEB594EE7",
+        },
+        "LogStreamName": "default",
+      },
+      "Type": "AWS::Logs::LogStream",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "LongtermDashboardF6AEC00C": {
+      "Properties": {
+        "DashboardBody": {
+          "Fn::Join": [
+            "",
+            [
+              "{"start":"-P90D","widgets":[{"type":"metric","width":12,"height":6,"x":0,"y":0,"properties":{"view":"timeSeries","title":"Cost (USD, daily)","region":"",
+              {
+                "Ref": "AWS::Region",
+              },
+              "","metrics":[["claude-code","Cost",{"period":86400,"stat":"Sum"}]],"yAxis":{}}},{"type":"metric","width":12,"height":6,"x":12,"y":0,"properties":{"view":"timeSeries","title":"Tokens by type (daily)","region":"",
+              {
+                "Ref": "AWS::Region",
+              },
+              "","metrics":[["claude-code","Tokens","type","input",{"period":86400,"stat":"Sum"}],["claude-code","Tokens","type","output",{"period":86400,"stat":"Sum"}],["claude-code","Tokens","type","cacheRead",{"period":86400,"stat":"Sum"}],["claude-code","Tokens","type","cacheCreation",{"period":86400,"stat":"Sum"}]],"yAxis":{}}},{"type":"metric","width":24,"height":6,"x":0,"y":6,"properties":{"view":"timeSeries","title":"Tool failure rate (%, daily)","region":"",
+              {
+                "Ref": "AWS::Region",
+              },
+              "","metrics":[[{"label":"failure %","expression":"100 * FILL(num, 0) / (FILL(d0, 0))","period":86400}],["claude-code","ToolFailures",{"id":"num","visible":false,"period":86400,"stat":"Sum"}],["claude-code","ToolCalls",{"id":"d0","visible":false,"period":86400,"stat":"Sum"}]],"yAxis":{"left":{"min":0}}}}]}",
+            ],
+          ],
+        },
+        "DashboardName": "claude-code-trends",
+      },
+      "Type": "AWS::CloudWatch::Dashboard",
+    },
+    "OtlpIngestApiAllowedIpSet64631BC7": {
+      "Properties": {
+        "Addresses": [
+          "0.0.0.0/1",
+          "128.0.0.0/1",
+        ],
+        "IPAddressVersion": "IPV4",
+        "Name": "claude-code-otlp-ingest-allowed-ips",
+        "Scope": "REGIONAL",
+      },
+      "Type": "AWS::WAFv2::IPSet",
+    },
+    "OtlpIngestApiProxyFnA0E4BB02": {
+      "DependsOn": [
+        "OtlpIngestApiProxyFnServiceRoleDefaultPolicy475A87E3",
+        "OtlpIngestApiProxyFnServiceRole9378010E",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "6839b7c10b598c11f748bcfd405bc95e9a1d26ec26992cbb2f303221ad7758b4.zip",
+        },
+        "Environment": {
+          "Variables": {
+            "EVENTS_LOG_GROUP": {
+              "Ref": "EventsLogGroupEB594EE7",
+            },
+            "EVENTS_LOG_STREAM": "default",
+            "METRICS_NAMESPACE": "claude-code",
+          },
+        },
+        "Handler": "index.handler",
+        "LoggingConfig": {
+          "LogGroup": {
+            "Ref": "OtlpIngestApiProxyFnLogGroup8F5DD5F2",
+          },
+        },
+        "MemorySize": 256,
+        "Role": {
+          "Fn::GetAtt": [
+            "OtlpIngestApiProxyFnServiceRole9378010E",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs22.x",
+        "Timeout": 15,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "OtlpIngestApiProxyFnLogGroup8F5DD5F2": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "RetentionInDays": 7,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "OtlpIngestApiProxyFnServiceRole9378010E": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "OtlpIngestApiProxyFnServiceRoleDefaultPolicy475A87E3": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "cloudwatch:PutMetricData",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            {
+              "Action": "logs:PutLogEvents",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "EventsLogGroupEB594EE7",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "OtlpIngestApiProxyFnServiceRoleDefaultPolicy475A87E3",
+        "Roles": [
+          {
+            "Ref": "OtlpIngestApiProxyFnServiceRole9378010E",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "OtlpIngestApiRestApi87272577": {
+      "Properties": {
+        "Description": "OTLP proxy for Claude Code telemetry (Hono on Lambda, SigV4 forwarding)",
+        "EndpointConfiguration": {
+          "Types": [
+            "REGIONAL",
+          ],
+        },
+        "Name": "claude-code-otlp-ingest",
+      },
+      "Type": "AWS::ApiGateway::RestApi",
+    },
+    "OtlpIngestApiRestApiAccountDD3EA6E1": {
+      "DeletionPolicy": "Retain",
+      "DependsOn": [
+        "OtlpIngestApiRestApi87272577",
+      ],
+      "Properties": {
+        "CloudWatchRoleArn": {
+          "Fn::GetAtt": [
+            "OtlpIngestApiRestApiCloudWatchRoleBD1FA247",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::ApiGateway::Account",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "OtlpIngestApiRestApiApiKey6C9FA9E0": {
+      "Properties": {
+        "Enabled": true,
+        "Name": "claude-code-otlp-ingest",
+        "StageKeys": [
+          {
+            "RestApiId": {
+              "Ref": "OtlpIngestApiRestApi87272577",
+            },
+            "StageName": {
+              "Ref": "OtlpIngestApiRestApiDeploymentStageprd317DDC7D",
+            },
+          },
+        ],
+      },
+      "Type": "AWS::ApiGateway::ApiKey",
+    },
+    "OtlpIngestApiRestApiCloudWatchRoleBD1FA247": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "apigateway.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "OtlpIngestApiRestApiDeployment9630657956f15c3ab38dbf67e0f5521cc510e16b": {
+      "DependsOn": [
+        "OtlpIngestApiRestApiv1logsPOSTE2336CF3",
+        "OtlpIngestApiRestApiv1logs2D8E3815",
+        "OtlpIngestApiRestApiv1metricsPOST69502025",
+        "OtlpIngestApiRestApiv1metrics66606B44",
+        "OtlpIngestApiRestApiv1B7D3ABE3",
+      ],
+      "Metadata": {
+        "aws:cdk:do-not-refactor": true,
+      },
+      "Properties": {
+        "Description": "OTLP proxy for Claude Code telemetry (Hono on Lambda, SigV4 forwarding)",
+        "RestApiId": {
+          "Ref": "OtlpIngestApiRestApi87272577",
+        },
+      },
+      "Type": "AWS::ApiGateway::Deployment",
+    },
+    "OtlpIngestApiRestApiDeploymentStageprd317DDC7D": {
+      "DependsOn": [
+        "OtlpIngestApiRestApiAccountDD3EA6E1",
+      ],
+      "Properties": {
+        "DeploymentId": {
+          "Ref": "OtlpIngestApiRestApiDeployment9630657956f15c3ab38dbf67e0f5521cc510e16b",
+        },
+        "MethodSettings": [
+          {
+            "DataTraceEnabled": false,
+            "HttpMethod": "*",
+            "ResourcePath": "/*",
+            "ThrottlingBurstLimit": 100,
+            "ThrottlingRateLimit": 50,
+          },
+        ],
+        "RestApiId": {
+          "Ref": "OtlpIngestApiRestApi87272577",
+        },
+        "StageName": "prd",
+      },
+      "Type": "AWS::ApiGateway::Stage",
+    },
+    "OtlpIngestApiRestApiUsagePlan2EE97A11": {
+      "Properties": {
+        "ApiStages": [
+          {
+            "ApiId": {
+              "Ref": "OtlpIngestApiRestApi87272577",
+            },
+            "Stage": {
+              "Ref": "OtlpIngestApiRestApiDeploymentStageprd317DDC7D",
+            },
+            "Throttle": {},
+          },
+        ],
+        "Throttle": {
+          "BurstLimit": 100,
+          "RateLimit": 50,
+        },
+        "UsagePlanName": "claude-code-otlp-ingest",
+      },
+      "Type": "AWS::ApiGateway::UsagePlan",
+    },
+    "OtlpIngestApiRestApiUsagePlanUsagePlanKeyResourceTestClaudeObservabilityOtlpIngestApiRestApiApiKeyF50636D8CF072F93": {
+      "Properties": {
+        "KeyId": {
+          "Ref": "OtlpIngestApiRestApiApiKey6C9FA9E0",
+        },
+        "KeyType": "API_KEY",
+        "UsagePlanId": {
+          "Ref": "OtlpIngestApiRestApiUsagePlan2EE97A11",
+        },
+      },
+      "Type": "AWS::ApiGateway::UsagePlanKey",
+    },
+    "OtlpIngestApiRestApiv1B7D3ABE3": {
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "OtlpIngestApiRestApi87272577",
+            "RootResourceId",
+          ],
+        },
+        "PathPart": "v1",
+        "RestApiId": {
+          "Ref": "OtlpIngestApiRestApi87272577",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "OtlpIngestApiRestApiv1logs2D8E3815": {
+      "Properties": {
+        "ParentId": {
+          "Ref": "OtlpIngestApiRestApiv1B7D3ABE3",
+        },
+        "PathPart": "logs",
+        "RestApiId": {
+          "Ref": "OtlpIngestApiRestApi87272577",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "OtlpIngestApiRestApiv1logsPOSTApiPermissionTestClaudeObservabilityOtlpIngestApiRestApi313AD049POSTv1logsF6D6969E": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "OtlpIngestApiProxyFnA0E4BB02",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              {
+                "Ref": "OtlpIngestApiRestApi87272577",
+              },
+              "/",
+              {
+                "Ref": "OtlpIngestApiRestApiDeploymentStageprd317DDC7D",
+              },
+              "/POST/v1/logs",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "OtlpIngestApiRestApiv1logsPOSTApiPermissionTestTestClaudeObservabilityOtlpIngestApiRestApi313AD049POSTv1logs5B554252": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "OtlpIngestApiProxyFnA0E4BB02",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              {
+                "Ref": "OtlpIngestApiRestApi87272577",
+              },
+              "/test-invoke-stage/POST/v1/logs",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "OtlpIngestApiRestApiv1logsPOSTE2336CF3": {
+      "Properties": {
+        "ApiKeyRequired": true,
+        "AuthorizationType": "NONE",
+        "HttpMethod": "POST",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "OtlpIngestApiProxyFnA0E4BB02",
+                    "Arn",
+                  ],
+                },
+                "/invocations",
+              ],
+            ],
+          },
+        },
+        "ResourceId": {
+          "Ref": "OtlpIngestApiRestApiv1logs2D8E3815",
+        },
+        "RestApiId": {
+          "Ref": "OtlpIngestApiRestApi87272577",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "OtlpIngestApiRestApiv1metrics66606B44": {
+      "Properties": {
+        "ParentId": {
+          "Ref": "OtlpIngestApiRestApiv1B7D3ABE3",
+        },
+        "PathPart": "metrics",
+        "RestApiId": {
+          "Ref": "OtlpIngestApiRestApi87272577",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "OtlpIngestApiRestApiv1metricsPOST69502025": {
+      "Properties": {
+        "ApiKeyRequired": true,
+        "AuthorizationType": "NONE",
+        "HttpMethod": "POST",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "OtlpIngestApiProxyFnA0E4BB02",
+                    "Arn",
+                  ],
+                },
+                "/invocations",
+              ],
+            ],
+          },
+        },
+        "ResourceId": {
+          "Ref": "OtlpIngestApiRestApiv1metrics66606B44",
+        },
+        "RestApiId": {
+          "Ref": "OtlpIngestApiRestApi87272577",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "OtlpIngestApiRestApiv1metricsPOSTApiPermissionTestClaudeObservabilityOtlpIngestApiRestApi313AD049POSTv1metrics5BFAF817": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "OtlpIngestApiProxyFnA0E4BB02",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              {
+                "Ref": "OtlpIngestApiRestApi87272577",
+              },
+              "/",
+              {
+                "Ref": "OtlpIngestApiRestApiDeploymentStageprd317DDC7D",
+              },
+              "/POST/v1/metrics",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "OtlpIngestApiRestApiv1metricsPOSTApiPermissionTestTestClaudeObservabilityOtlpIngestApiRestApi313AD049POSTv1metrics0C811C7D": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "OtlpIngestApiProxyFnA0E4BB02",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              {
+                "Ref": "OtlpIngestApiRestApi87272577",
+              },
+              "/test-invoke-stage/POST/v1/metrics",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "OtlpIngestApiWebAcl9A872572": {
+      "Properties": {
+        "DefaultAction": {
+          "Block": {},
+        },
+        "Name": "claude-code-otlp-ingest",
+        "Rules": [
+          {
+            "Action": {
+              "Allow": {},
+            },
+            "Name": "allow-listed-ips",
+            "Priority": 0,
+            "Statement": {
+              "IPSetReferenceStatement": {
+                "Arn": {
+                  "Fn::GetAtt": [
+                    "OtlpIngestApiAllowedIpSet64631BC7",
+                    "Arn",
+                  ],
+                },
+              },
+            },
+            "VisibilityConfig": {
+              "CloudWatchMetricsEnabled": true,
+              "MetricName": "allow-listed-ips",
+              "SampledRequestsEnabled": true,
+            },
+          },
+        ],
+        "Scope": "REGIONAL",
+        "VisibilityConfig": {
+          "CloudWatchMetricsEnabled": true,
+          "MetricName": "claude-code-otlp-ingest",
+          "SampledRequestsEnabled": true,
+        },
+      },
+      "Type": "AWS::WAFv2::WebACL",
+    },
+    "OtlpIngestApiWebAclAssociationFFB7F6E2": {
+      "Properties": {
+        "ResourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:aws:apigateway:",
+              {
+                "Ref": "AWS::Region",
+              },
+              "::/restapis/",
+              {
+                "Ref": "OtlpIngestApiRestApi87272577",
+              },
+              "/stages/",
+              {
+                "Ref": "OtlpIngestApiRestApiDeploymentStageprd317DDC7D",
+              },
+            ],
+          ],
+        },
+        "WebACLArn": {
+          "Fn::GetAtt": [
+            "OtlpIngestApiWebAcl9A872572",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::WAFv2::WebACLAssociation",
+    },
+    "QueryApiErrors24337524": {
+      "Properties": {
+        "LogGroupNames": [
+          {
+            "Ref": "EventsLogGroupEB594EE7",
+          },
+        ],
+        "Name": "claude-code/api-errors",
+        "QueryString": "fields @timestamp, attributes.model, attributes.error, attributes.status_code
+| filter body = 'claude_code.api_error'
+| sort @timestamp desc
+| limit 50",
+      },
+      "Type": "AWS::Logs::QueryDefinition",
+    },
+    "QueryDailyCost3537C1BE": {
+      "Properties": {
+        "LogGroupNames": [
+          {
+            "Ref": "EventsLogGroupEB594EE7",
+          },
+        ],
+        "Name": "claude-code/daily-cost",
+        "QueryString": "filter body = 'claude_code.api_request'
+| stats sum(attributes.cost_usd) as cost_usd by bin(1d) as day
+| sort day desc",
+      },
+      "Type": "AWS::Logs::QueryDefinition",
+    },
+    "QueryDailyTokenUsageA84B6C6F": {
+      "Properties": {
+        "LogGroupNames": [
+          {
+            "Ref": "EventsLogGroupEB594EE7",
+          },
+        ],
+        "Name": "claude-code/daily-token-usage",
+        "QueryString": "filter body = 'claude_code.api_request'
+| stats sum(attributes.input_tokens) as input, sum(attributes.output_tokens) as output, sum(attributes.cache_read_tokens) as cache_read, sum(attributes.cache_creation_tokens) as cache_creation by bin(1d) as day
+| sort day desc",
+      },
+      "Type": "AWS::Logs::QueryDefinition",
+    },
+    "QuerySkillActivationsE709FDC4": {
+      "Properties": {
+        "LogGroupNames": [
+          {
+            "Ref": "EventsLogGroupEB594EE7",
+          },
+        ],
+        "Name": "claude-code/skill-activations",
+        "QueryString": "fields @timestamp, attributes.skill.name, attributes.invocation_trigger, attributes.skill.source
+| filter body = 'claude_code.skill_activated'
+| sort @timestamp desc
+| limit 50",
+      },
+      "Type": "AWS::Logs::QueryDefinition",
+    },
+    "QuerySkillCostEEF0D161": {
+      "Properties": {
+        "LogGroupNames": [
+          {
+            "Ref": "EventsLogGroupEB594EE7",
+          },
+        ],
+        "Name": "claude-code/skill-cost",
+        "QueryString": "filter body = 'claude_code.api_request' and ispresent(attributes.skill.name)
+| stats sum(attributes.cost_usd) as cost_usd, sum(attributes.output_tokens) as output_tokens by attributes.skill.name as skill
+| sort cost_usd desc",
+      },
+      "Type": "AWS::Logs::QueryDefinition",
+    },
+    "QueryToolUsageSummaryF106A70A": {
+      "Properties": {
+        "LogGroupNames": [
+          {
+            "Ref": "EventsLogGroupEB594EE7",
+          },
+        ],
+        "Name": "claude-code/tool-usage-summary",
+        "QueryString": "filter body = 'claude_code.tool_result'
+| stats count(*) as calls, avg(attributes.duration_ms) as avg_ms, sum(attributes.success = 'false') as failures by attributes.tool_name as tool
+| sort calls desc",
+      },
+      "Type": "AWS::Logs::QueryDefinition",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;

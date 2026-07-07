@@ -1,0 +1,27 @@
+{
+  "name": "@claude-code-usage-dashboard/aws",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "type-check": "tsc --noEmit",
+    "deploy": "cdk deploy",
+    "diff": "cdk diff",
+    "synth": "cdk synth",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:update": "vitest run --update",
+    "clean": "rm -rf cdk.out"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.261.0",
+    "constructs": "^10.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.0",
+    "aws-cdk": "^2.1129.0",
+    "esbuild": "^0.25.0",
+    "tsx": "^4.23.0",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.9"
+  }
+}

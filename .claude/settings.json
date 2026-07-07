@@ -1,0 +1,12 @@
+{
+  "env": {
+    "CLAUDE_CODE_ENABLE_TELEMETRY": "1",
+    "OTEL_METRICS_EXPORTER": "otlp",
+    "OTEL_LOGS_EXPORTER": "otlp",
+    "OTEL_EXPORTER_OTLP_PROTOCOL": "http/json",
+    "OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE": "delta",
+    "OTEL_METRICS_INCLUDE_SESSION_ID": "false",
+    "OTEL_RESOURCE_ATTRIBUTES": "service.name=claude-code",
+    "OTEL_LOG_TOOL_DETAILS": "1"
+  }
+}

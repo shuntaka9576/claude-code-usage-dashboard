@@ -1,0 +1,6 @@
+{
+  "env": {
+    "OTEL_EXPORTER_OTLP_ENDPOINT": "https://<api-id>.execute-api.ap-northeast-1.amazonaws.com/prd",
+    "OTEL_EXPORTER_OTLP_HEADERS": "x-api-key=<API_KEY_VALUE>"
+  }
+}

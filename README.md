@@ -40,7 +40,6 @@ Claude Code の組み込み OTel が送出するのは**メトリクス**と**�
 | `claude_code.code_edit_tool.decision` | 編集ツールの受入判定 | `decision` (accept/reject), `tool` |
 | `claude_code.active_time.total` | アクティブ時間 (秒) | |
 
-
 **1. `/v1/metrics` に届くペイロードの形(模擬サンプル)** — OTLP ストアは PromQL 専用で raw JSON を取り出す CLI が無いため、ここだけ模擬。構造は実測に合わせている(OTLP http/json では int64 が文字列で届く、delta temporality 前提):
 
 ```json

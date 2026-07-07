@@ -6,10 +6,6 @@ export interface OtlpIngestConfig {
     burstLimit: number;
   };
   // WAF の IP 許可リスト。IP 制限したい場合は自分の送信元 IP に置き換える
-  // (確認: curl -s https://checkip.amazonaws.com → ['<IP>/32'])。
-  // 全開放は 0.0.0.0/1 + 128.0.0.0/1 の 2 レンジで表現する
-  // (WAF の IPSet は /0 を受け付けないため)。
-  // 注意: 0.0.0.0/32 は「単一アドレス 0.0.0.0 のみ許可」= 実質全遮断。
   allowedIps: string[];
 }
 
